@@ -1,0 +1,135 @@
+
+
+<!DOCTYPE html>
+<html>
+   <head>
+	<title>Note Maker</title>
+      <style>
+         #text {
+         display: block;
+         width:100%;
+         margin-left: auto;
+         margin-right: auto;
+         }
+         #Adder  {
+         background:lightblue;
+         border-radius: 10px;
+         width: 10em;
+         height: 3em;
+         position: absolute;
+         top: 100px;
+         left: 25%;
+         }
+         #Deleter  {
+         background:lightblue;
+         border-radius: 10px;
+         width: 10em;
+         height: 3em;
+         position: absolute;
+         top: 100px;
+         left: 75%;
+         }
+         #Editor  {
+         background:lightblue;
+         border-radius: 10px;
+         width: 10em;
+         height: 3em;
+         position: absolute;
+         top: 100px;
+         left: 50%;
+         }
+         ul {
+         list-style-type:none;
+         height:700px;
+         background:#ffffff;
+         margin-top:100px;
+         overflow:scroll;
+         overflow-x:hidden;
+         padding:0;
+         }
+         li{
+         float:down;
+         }
+         li a{
+         display : block;
+         background:black;
+         color:white;
+         text-align: center;
+         padding : 30px;
+         text-decoration:none;
+         }
+      </style>
+   </head>
+   <body>
+      <textarea id="text" rows=4 columns=400></textarea>
+      <button id="Deleter" onclick="remove()">Remove</button>
+      <button id="Editor" onclick="editor()">Edit</button>
+      <button id="Adder" onclick="add()">Add</button>
+      <ul id="main list" style="list-style-type:square"></ul>
+      <script>
+         var x=0;
+         var del=0;
+         var edit=0;
+         var updat=0;
+	 var selected=false;
+	 var item=0;
+         if(x==0&&localStorage.count!=0)
+         {
+         update();
+         }
+         function update()
+         {
+         document.getElementById("main list").innerHTML="";
+         x=localStorage.count;
+         for(i=1;i<=x;i++)
+         {
+         var t2=localStorage.getItem(i);
+         document.getElementById("main list").innerHTML+="<li onclick=selector("+i+")><a>"+t2+"</a></li>";
+         }
+         }
+         function selector(i)
+         {	 
+         selected=true;
+	 item=i;
+	 document.getElementById("text").value="";
+	 document.getElementById("text").value+=localStorage.getItem(i);
+         }
+         function remove()
+         {
+	 var i=item;
+         if(selected==true){
+         for(x=i;x<localStorage.count;x++)
+         {
+         localStorage.setItem(x,localStorage.getItem(x+1));
+         }
+         localStorage.count= Number(localStorage.count)-1;
+         update();
+         }
+	 selected=false;
+         }
+         function editor()
+         {
+         if(selected)
+         {
+	 var i=item;
+         localStorage.setItem(i,document.getElementById("text").value);
+         update();
+         }
+	 selected=false;
+         }
+         function add()
+         {
+         if(!localStorage.count)
+         localStorage.count=1;
+         else
+         localStorage.count=Number(localStorage.count)+1;
+         var text=document.getElementById("text").value;
+         document.getElementById("main list").innerHTML+="<li onclick=selector("+Number(localStorage.count)+")><a>"+text+"</a></li>";
+         document.getElementById("text").value="";
+         localStorage.setItem(localStorage.count,text);
+         }
+      </script>
+   </body>
+</html>
+
+
