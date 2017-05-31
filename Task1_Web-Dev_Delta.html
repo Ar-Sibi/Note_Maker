@@ -68,11 +68,11 @@
 	  <option value="1">High</option>
 	  <option value="2">Medium</option>
 	  <option value="3" selected="selected">Low</option>
-	  </select>
-	  <button class="buttons" id="deleter" onclick="remove()">Remove</button>
+      </select>
+      <button class="buttons" id="deleter" onclick="remove()">Remove</button>
       <button class="buttons"id="editor" onclick="editor()">Edit</button>
       <button class="buttons"id="adder" onclick="add()">Add</button>
-	  <button class="buttons" id="sorter" onclick="sorter()">Sort</button>
+      <button class="buttons" id="sorter" onclick="sorter()">Sort</button>
       <ul id="main list" style="list-style-type:square"></ul>
       </div>
 	  <script>
@@ -80,10 +80,10 @@
          var del=0;
          var edit=0;
          var updat=0;
-		 var selected=false;
-		 var item=0;
-		 disableAll();
-		 update();
+	 var selected=false;
+	 var item=0;
+	 disableAll();
+	 update();
          function update(){
 			document.getElementById("main list").innerHTML="";
 			x=localStorage.count;
@@ -91,24 +91,24 @@
 				var t2=localStorage.getItem(i);
 				document.getElementById("main list").innerHTML+="<li id="+i+"><a>"+t2+"</a></li>";
 				document.getElementById(""+i).style.backgroundColor="#"+(5*(4-localStorage.getItem("p"+i))).toString(16)+""
-																		+(5*(4-localStorage.getItem("p"+i))).toString(16)+""
-																		+"0000";
+										       +(5*(4-localStorage.getItem("p"+i))).toString(16)+""
+										       +"0000";
 			}
 			var d;
 			for(i=1;i<=x;i++){
-			var smth = function(element){
-			this.iod=i;
-			this.onclick1= function(event){
-			selector(this.iod);
-			};
-			element.addEventListener("click",this.onclick1.bind(this),false);
-			}
-			d=new smth(document.getElementById(""+i));
+				var smth = function(element){
+					this.iod=i;
+					this.onclick1= function(event){
+						selector(this.iod);
+					};
+					element.addEventListener("click",this.onclick1.bind(this),false);
+				}
+				d=new smth(document.getElementById(""+i));
 			}
 			if(!localStorage.count||localStorage.count==0)
-			document.getElementById("main list").innerHTML="<li><a>"+"No notes to display"+"</a></li>";
+				document.getElementById("main list").innerHTML="<li><a>"+"No notes to display"+"</a></li>";
 			}
-		function selector(i){
+	 function selector(i){
 			update();
 			document.getElementById("editor").disabled=false;
 			document.getElementById("deleter").disabled=false;
@@ -118,20 +118,19 @@
 			document.getElementById(item).style.background="#1313ef";
 			document.getElementById("text").value="";
 			document.getElementById("text").value+=localStorage.getItem(i);
-        }
-		function disabler(){
+	 } 
+	 function disabler(){
 			if(selected==false)
-			document.getElementById("editor").disabled=true;
-			document.getElementById("deleter").disabled=true;
-			document.getElementById("adder").disabled=false;
-		}
-		function disableAll(){
+				document.getElementById("editor").disabled=true;
+				document.getElementById("deleter").disabled=true;
+				document.getElementById("adder").disabled=false;
+	 }
+	 function disableAll(){
 			document.getElementById("editor").disabled=true;
 			document.getElementById("deleter").disabled=true;
 			document.getElementById("adder").disabled=true;
-		}
-		function remove()
-         {
+	 }
+	 function remove(){
 			var i=item;
 			if(selected==true){
 				for(x=i;x<localStorage.count;x++){
@@ -142,8 +141,8 @@
 			}
 			selected=false;
 			disableAll();
-        }
-		function editor(){
+	 }
+	 function editor(){
 			update();
 			if(selected){
 				var i=item;
@@ -155,32 +154,28 @@
 			selected=false;
 			disableAll();
          }
-		function sorter(){
-		var count=Number(localStorage.count);
-		var a1=[];
-		var b1=[];
-		var c=[];
-		c[0]=c[1]=c[2]=c[3]=0;
-		for(i=1;i<=count;i++)
-		a1[i-1]=localStorage.getItem(i);	
-		for(j=1;j<=count;j++)
-		b1[j-1]=localStorage.getItem("p"+j);
-		alert(b1);
-		for(i=0;i<=count;i++){
-			c[b1[i]]++;
-		}
-		alert(c);
+	 function sorter(){
+			var count=Number(localStorage.count);
+			var a1=[];
+			var b1=[];
+			var c=[];
+			c[0]=c[1]=c[2]=c[3]=0;
+			for(i=1;i<=count;i++)
+			a1[i-1]=localStorage.getItem(i);	
+			for(j=1;j<=count;j++)
+				b1[j-1]=localStorage.getItem("p"+j);
+			for(i=0;i<=count;i++)
+				c[b1[i]]++;
 			c[2]+=c[1];
-		for(i=0;i<count;i++){
-			localStorage.setItem(c[b1[i]-1]+1,a1[i]);
-			var x=(c[b1[i]-1]+1);
-			localStorage.setItem("p"+x,b1[i]);
-			c[b1[i]-1]++;
-		}
-		update();
-		alert("sorted");
-		}
-		function add(){
+			for(i=0;i<count;i++){
+				var x=(c[b1[i]-1]+1);
+				localStorage.setItem(x,a1[i]);
+				localStorage.setItem("p"+x,b1[i]);
+				c[b1[i]-1]++;
+			}
+			update();
+	 }
+	 function add(){
 			if(!localStorage.count)
 				localStorage.count=1;
 			else
