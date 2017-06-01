@@ -28,18 +28,18 @@
         #editor  {
 			left: 60%;
         }
-		select{
-			margin-top:30px;
-		}
-		#text {
+	select{
+		margin-top:30px;
+	}
+	#text {
 			display: block;
 			background-color:black;
 			width:100%;
 			margin-left: auto;
 			margin-right: auto;
 			color:white;
-		}
-		ul {
+	}
+	ul {
 			list-style-type:none;
 			height:550px;
 			background:#000000;
@@ -115,7 +115,8 @@
 			document.getElementById("adder").disabled=true;
 			selected=true;
 			item=i;
-			document.getElementById(item).style.background="#1313ef";
+			document.getElementById("dropper").value=localStorage.getItem("p"+i);
+		 	document.getElementById(item).style.background="#1313ef";
 			document.getElementById("text").value="";
 			document.getElementById("text").value+=localStorage.getItem(i);
 	 } 
