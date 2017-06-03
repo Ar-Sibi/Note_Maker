@@ -124,7 +124,6 @@
 			if(selected==true){
 				for(x=i;x<localStorage.count;x++){
 					localStorage.setItem(x,localStorage.getItem(x+1));
-					localStorage.setItem("p"+x,localStorage.getItem("p"+(x+1)));
 				}
 				localStorage.count= Number(localStorage.count)-1;
 				update();
