@@ -1,157 +1,159 @@
-
-
 <!DOCTYPE html>
-<html>
-   <head>
-	<title>Note Maker</title>
-	   <style>
-		.buttons{
-			background:lightblue;
-			border-radius: 10px;
-			width: 10em;
-			height: 3em;
-			position: absolute;
-			top: 100px;
-		}
-		body{
-			background-color:black;
-		}
-		#background{
-			background-color:#000000;
-		}
-        	#adder  {
-			left: 25%;
-        	}
-        	#deleter  {
-			left: 75%;
-        	}
-        	#editor  {
-			left: 50%;
-        	}
-		#text {
-			display: block;
-			background-color:black;
-			width:100%;
-			margin-left: auto;
-			margin-right: auto;
-			color:white;
-		}
-		ul {
-			list-style-type:none;
-			height:550px;
-			background:#000000;
-			margin-top:100px;
-			overflow:scroll;
-			overflow-x:hidden;
-			padding:0;
-        	}
-        	li{
-			float:down;
-        	}
-        	li a{
-			display : block;
-			color:white;
-			border-style:solid;
-			text-align: center;
-			padding : 30px;
-			text-decoration:none;
-        	}
-	     </style>
+	<html>
+		<head>
+			<title>Note Maker</title>
+			<style>
+			.buttons{
+				background:lightblue;
+				border-radius: 10px;
+				width: 10em;
+				height: 3em;
+				position: absolute;
+				top: 100px;
+			}
+			body{
+				background-color:black;
+			}
+			#background{
+				background-color:#000000;
+			}
+			#adder  {
+				left: 25%;
+			}
+			#deleter  {
+				left: 75%;
+			}
+			#editor  {
+				left: 50%;
+			}
+			#text {
+				display: block;
+				background-color:black;
+				width:100%;
+				margin-left: auto;
+				margin-right: auto;
+				color:white;
+			}
+			ul {
+				list-style-type:none;
+				height:550px;
+				background:#000000;
+				margin-top:100px;
+				overflow:scroll;
+				overflow-x:hidden;
+				padding:0;
+			}
+			li{
+				float:down;
+			}
+			li a{
+				display : block;
+				color:white;	
+				border-style:solid;
+				text-align: center;
+				padding : 30px;
+				text-decoration:none;
+			}
+		</style>
 	</head>
-   <body>
-      <div id="background">
-	  <textarea id="text" rows=4 columns=400 onclick="disabler()"></textarea>
-      <button class="buttons" id="deleter" onclick="remove()">Remove</button>
-      <button class="buttons"id="editor" onclick="editor()">Edit</button>
-      <button class="buttons"id="adder" onclick="add()">Add</button>
-      <ul id="main list" style="list-style-type:square"></ul>
-      </div>
-     <script>
-         var x=0;
-         var del=0;
-         var edit=0;
-         var updat=0;
-	 var selected=false;
-	 var item=0;
-	 disableAll();
-	 update();
-         function update(){
-			document.getElementById("main list").innerHTML="";
-			x=localStorage.count;
-			for(i=1;i<=x;i++){
-				var t2=localStorage.getItem(i);
-				document.getElementById("main list").innerHTML+="<li id="+i+"><a>"+t2+"</a></li>";
-				document.getElementById(i).style.background="ff1111";
-			}
-			var d;
-			for(i=1;i<=x;i++){
-				var smth = function(element){
-					this.iod=i;
-					this.onclick1= function(event){
-					selector(this.iod);
-					};
-				element.addEventListener("click",this.onclick1.bind(this),false);
+	<body>
+		<div id="background">
+			<textarea id="text" rows=4 columns=400 onclick="disabler()"></textarea>
+			<button class="buttons" id="deleter" onclick="remove()">Remove</button>
+			<button class="buttons"id="editor" onclick="editor()">Edit</button>
+			<button class="buttons"id="adder" onclick="add()">Add</button>
+			<ul id="main list" style="list-style-type:square"></ul>
+		</div>
+		<script>
+			var x=0;
+			var del=0;
+			var edit=0;
+			var updat=0;
+			var selected=false;
+			var item=0;
+ 			disableAll();
+ 			update();
+			function update(){
+				document.getElementById("main list").innerHTML="";
+				x=localStorage.count;
+				for(i=1;i<=x;i++){
+					var t2=localStorage.getItem(i);
+					document.getElementById("main list").innerHTML+="<li id="+i+"><a>"+t2+"</a></li>";
+					document.getElementById(i).style.background="ff1111";
 				}
-			d=new smth(document.getElementById(""+i));
-			}
-			if(!localStorage.count||localStorage.count==0)
-			document.getElementById("main list").innerHTML="<li><a>"+"No notes to display"+"</a></li>";
-		}
-	 function selector(i){
-			update();
-			document.getElementById("editor").disabled=false;
-			document.getElementById("deleter").disabled=false;
-			document.getElementById("adder").disabled=true;
-			selected=true;
-			item=i;
-			document.getElementById(item).style.background="#1313ef";
-			document.getElementById("text").value="";
-			document.getElementById("text").value+=localStorage.getItem(i);
-	}
-	 function disabler(){
-			if(selected==false)
-			document.getElementById("editor").disabled=true;
-			document.getElementById("deleter").disabled=true;
-			document.getElementById("adder").disabled=false;
-	}
-	function disableAll(){
-			document.getElementById("editor").disabled=true;
-			document.getElementById("deleter").disabled=true;
-			document.getElementById("adder").disabled=true;
-	}
-	function remove(){
-			var i=item;
-			if(selected==true){
-				for(x=i;x<localStorage.count;x++){
-					localStorage.setItem(x,localStorage.getItem(x+1));
+				var d;
+				for(i=1;i<=x;i++){
+					var smth = function(element){
+						this.iod=i;
+						this.onclick1= function(event){
+						selector(this.iod);
+						};
+						element.addEventListener("click",this.onclick1.bind(this),false);
+					}
+					d=new smth(document.getElementById(""+i));
 				}
-				localStorage.count= Number(localStorage.count)-1;
+				if(!localStorage.count||localStorage.count==0)
+				document.getElementById("main list").innerHTML="<li><a>"+"No notes to display"+"</a></li>";
+			}
+			
+			function selector(i){
 				update();
+				document.getElementById("editor").disabled=false;
+				document.getElementById("deleter").disabled=false;
+				document.getElementById("adder").disabled=true;
+				selected=true;
+				item=i;
+				document.getElementById(item).style.background="#1313ef";
+				document.getElementById("text").value="";
+				document.getElementById("text").value+=localStorage.getItem(i);
+			}			
+			function disabler(){
+				if(selected==false)
+					document.getElementById("editor").disabled=true;
+					document.getElementById("deleter").disabled=true;
+					document.getElementById("adder").disabled=false;
 			}
-			selected=false;
-			disableAll();
-        }
-	function editor(){
-			update();
-			if(selected){
+			
+			function disableAll(){
+				document.getElementById("editor").disabled=true;
+				document.getElementById("deleter").disabled=true;
+				document.getElementById("adder").disabled=true;
+			}
+			
+			function remove(){
 				var i=item;
-				localStorage.setItem(i,document.getElementById("text").value);
+				if(selected==true){
+					for(x=i;x<localStorage.count;x++){
+						localStorage.setItem(x,localStorage.getItem(x+1));
+					}
+					localStorage.count= Number(localStorage.count)-1;
+					update();
+				}
+				selected=false;
+				disableAll();
+			}
+			
+			function editor(){
 				update();
-			}	
-			selected=false;
-			disableAll();
-        }
-	function add(){
-			if(!localStorage.count)
-				localStorage.count=1;
-			else
-				localStorage.count=Number(localStorage.count)+1;
-			var text=document.getElementById("text").value;
-			document.getElementById("main list").innerHTML+="<li id="+Number(localStorage.count)+"><a>"+text+"</a></li>";		
-			document.getElementById("text").value="";
-			localStorage.setItem(localStorage.count,text);
-			update();
-		 }
-      </script>
-   </body>
+				if(selected){
+					var i=item;
+					localStorage.setItem(i,document.getElementById("text").value);
+					update();
+				}	
+				selected=false;
+				disableAll();
+			}
+			function add(){
+				if(!localStorage.count)
+					localStorage.count=1;
+				else
+					localStorage.count=Number(localStorage.count)+1;
+				var text=document.getElementById("text").value;
+				document.getElementById("main list").innerHTML+="<li id="+Number(localStorage.count)+"><a>"+text+"</a></li>";		
+				document.getElementById("text").value="";
+				localStorage.setItem(localStorage.count,text);
+				update();
+			}
+		</script>
+	</body>
 </html>
