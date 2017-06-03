@@ -1,8 +1,6 @@
-
-
 <!DOCTYPE html>
 <html>
-   <head>
+	<head>
 		<title>Note Maker</title>
 	   	<style>
 			.buttons{
@@ -19,15 +17,15 @@
 			#background{
 				background-color:#000000;
 			}
-        	#adder  {
+			#adder  {
 				left: 30%;
-        	}
-        	#deleter  {
+        		}
+        		#deleter  {
 				left: 85%;
-        	}
-        	#editor  {
+        		}
+        		#editor  {
 				left: 60%;
-        	}
+        		}
 			select{
 				margin-top:30px;
 			}
@@ -47,18 +45,18 @@
 				overflow:scroll;
 				overflow-x:hidden;
 				padding:0;
-        	}	
+        		}	
 			li{
 				float:down;
-        	}
-        	li a{
+        		}
+        		li a{
 				display : block;
 				color:white;
 				border-style:solid;
 				text-align: center;
 				padding : 30px;
 				text-decoration:none;
-        	}	
+        		}	
 		</style>
 	</head>
 	<body>
@@ -84,7 +82,7 @@
 	 		var item=0;
 	 		disableAll();
 	 		update();
-         	
+         		
 			function update(){
 				document.getElementById("main list").innerHTML="";
 				x=localStorage.count;
@@ -161,7 +159,7 @@
 				}	
 				selected=false;
 				disableAll();
-         	}	
+         		}	
 			
 	 		function sorter(){
 				var count=Number(localStorage.count);
@@ -200,5 +198,5 @@
 			}
 			
 		</script>
-   </body>
+	</body>
 </html>
