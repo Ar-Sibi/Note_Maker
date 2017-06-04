@@ -48,15 +48,25 @@
         		}	
 			li{
 				float:down;
-        		}
-        		li a{
-				display : block;
+        			display : block;
 				color:white;
 				border-style:solid;
 				text-align: center;
 				padding : 30px;
 				text-decoration:none;
-        		}	
+			}
+			.a{
+				background-color:#000000
+				}
+        	.a1{
+				background-color:#ff0000
+        		}
+			.a2{
+				background-color:#af0000
+        		}
+			.a3{
+				background-color:#4f0000
+        		}
 		</style>
 	</head>
 	<body>
@@ -74,6 +84,12 @@
 			<ul id="main list" style="list-style-type:square"></ul>
 		</div>
 		<script>
+			class list_item{
+				constructor(text,priority){
+				this.text=text;
+				this.priority=priority;
+				}
+			}
 			var x=0;
 			var del=0;
 			var edit=0;
@@ -87,15 +103,13 @@
 				document.getElementById("main list").innerHTML="";
 				x=localStorage.count;
 				for(i=1;i<=x;i++){
-					var text=localStorage.getItem(i);
-					document.getElementById("main list").innerHTML+="<li id="+i+"><a>"+text+"</a></li>";
-					document.getElementById(""+i).style.backgroundColor="#"+(5*(4-localStorage.getItem("p"+i))).toString(16)+""
-						+(5*(4-localStorage.getItem("p"+i))).toString(16)+""
-						+"0000";
+					var update_item=JSON.parse(localStorage.getItem(i));
+					var text=update_item.text;
+					document.getElementById("main list").innerHTML+="<li id="+i+" class=a"+update_item.priority+"><a>"+text+"</li>";
 				}
 				bind();
 				if(!localStorage.count||localStorage.count==0)
-					document.getElementById("main list").innerHTML="<li><a>"+"No notes to display"+"</a></li>";
+					document.getElementById("main list").innerHTML="<li>"+"No notes to display"+"</li>";
 			}
 	 		
 			function bind(){
@@ -103,6 +117,7 @@
 				//Can't add event listeners directly because id of selected element reqd
 				var binder;
 				for(i=1;i<=localStorage.count;i++){
+
 					var binderClass = function(element){
 						this.iod=i;
 						this.onclick1= function(event){
@@ -116,15 +131,16 @@
 			
 			function selector(i){
 				update();
+				var selecti=JSON.parse(localStorage.getItem(i));
 				document.getElementById("editor").disabled=false;
 				document.getElementById("deleter").disabled=false;
 				document.getElementById("adder").disabled=true;
 				selected=true;					// Used in edit and delete functions 
 				item=i;						// Index of selected item is saved thus					   
-				document.getElementById("dropper").value=localStorage.getItem("p"+i);
+				document.getElementById("dropper").value=selecti.priority;
 			 	document.getElementById(item).style.background="#1313ef";
 				document.getElementById("text").value="";
-				document.getElementById("text").value+=localStorage.getItem(i);
+				document.getElementById("text").value+=selecti.text;
 	 		} 	
 	 		
 			function disabler(){
@@ -146,7 +162,6 @@
 				if(selected==true){
 					for(x=i;x<localStorage.count;x++){
 						localStorage.setItem(x,localStorage.getItem(x+1));
-						localStorage.setItem("p"+x,localStorage.getItem("p"+(x+1)));
 					}	
 					localStorage.count= Number(localStorage.count)-1;
 					update();
@@ -161,8 +176,10 @@
 				if(selected){
 					var i=item;						// item obtained from selector function
 					var drop=document.getElementById("dropper");
-					localStorage.setItem(i,document.getElementById("text").value);
-					localStorage.setItem("p"+i,parseInt(drop.options[drop.selectedIndex].value));
+					var editeditem = new list_item();
+					editeditem.text=document.getElementById("text").value;
+					editeditem.priority=parseInt(drop.options[drop.selectedIndex].value)
+					localStorage.setItem(i,JSON.stringify(editeditem));
 					update();
 				}	
 				selected=false;
@@ -172,21 +189,20 @@
 	 		function sorter(){
 				//Counting Sort the elements based on priority
 				var count=Number(localStorage.count);
-				var textarray=[];
+				var objectarray=[];
 				var priority=[];
 				var count_priorty=[];
 				count_priorty[0]=count_priorty[1]=count_priorty[2]=count_priorty[3]=0;
 				for(i=1;i<=count;i++)
-					textarray[i-1]=localStorage.getItem(i);	
+					objectarray[i-1]=JSON.parse(localStorage.getItem(i));	
 				for(j=1;j<=count;j++)
-					priority[j-1]=localStorage.getItem("p"+j);
+					priority[j-1]=objectarray[j-1].priority;
 				for(i=0;i<=count;i++)
 					count_priorty[priority[i]]++;
 				count_priorty[2]+=count_priorty[1];
 				for(i=0;i<count;i++){
 					var indexer=(count_priorty[priority[i]-1]+1);
-					localStorage.setItem(indexer,textarray[i]);
-					localStorage.setItem("p"+indexer,priority[i]);
+					localStorage.setItem(indexer,JSON.stringify(objectarray[i]));
 					count_priorty[priority[i]-1]++;
 				}
 				update();
@@ -199,12 +215,14 @@
 					localStorage.count=Number(localStorage.count)+1;
 				//Get text from drop_down box
 				var text=document.getElementById("text").value;
+				var addeditem= new list_item();
+				var drop=document.getElementById("dropper");
+				addeditem.text=text;
+				addeditem.priority=parseInt(drop.options[drop.selectedIndex].value);
+				//Get Priority From drop_down box
 				document.getElementById("main list").innerHTML+="<li id="+Number(localStorage.count)+"><a>"+text+"</a></li>";
 				document.getElementById("text").value="";
-				localStorage.setItem(localStorage.count,text);
-				//Get Priority From drop_down box
-				var drop=document.getElementById("dropper");
-				localStorage.setItem("p"+localStorage.count,parseInt(drop.options[drop.selectedIndex].value));
+				localStorage.setItem(localStorage.count,JSON.stringify(addeditem));
 				update();
 			}
 			
