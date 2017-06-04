@@ -82,19 +82,27 @@
 	 		var item=0;
 	 		disableAll();
 	 		update();
-         		
+         		//localStorage items of form index hold the text and of the form "p"+index hold the priority
 			function update(){
 				document.getElementById("main list").innerHTML="";
 				x=localStorage.count;
 				for(i=1;i<=x;i++){
-					var txt2=localStorage.getItem(i);
-					document.getElementById("main list").innerHTML+="<li id="+i+"><a>"+txt2+"</a></li>";
+					var text=localStorage.getItem(i);
+					document.getElementById("main list").innerHTML+="<li id="+i+"><a>"+text+"</a></li>";
 					document.getElementById(""+i).style.backgroundColor="#"+(5*(4-localStorage.getItem("p"+i))).toString(16)+""
 						+(5*(4-localStorage.getItem("p"+i))).toString(16)+""
 						+"0000";
 				}
+				bind();
+				if(!localStorage.count||localStorage.count==0)
+					document.getElementById("main list").innerHTML="<li><a>"+"No notes to display"+"</a></li>";
+			}
+	 		
+			function bind(){
+				//Adding event listener by binding it
+				//Can't add event listeners directly because id of selected element reqd
 				var binder;
-				for(i=1;i<=x;i++){
+				for(i=1;i<=localStorage.count;i++){
 					var binderClass = function(element){
 						this.iod=i;
 						this.onclick1= function(event){
@@ -104,17 +112,15 @@
 					}
 					binder=new binderClass(document.getElementById(""+i));
 				}
-				if(!localStorage.count||localStorage.count==0)
-					document.getElementById("main list").innerHTML="<li><a>"+"No notes to display"+"</a></li>";
-			}
-	 		
+			}	
+			
 			function selector(i){
 				update();
 				document.getElementById("editor").disabled=false;
 				document.getElementById("deleter").disabled=false;
 				document.getElementById("adder").disabled=true;
-				selected=true;
-				item=i;
+				selected=true;					// Used in edit and delete functions 
+				item=i;						// Index of selected item is saved thus					   
 				document.getElementById("dropper").value=localStorage.getItem("p"+i);
 			 	document.getElementById(item).style.background="#1313ef";
 				document.getElementById("text").value="";
@@ -135,7 +141,8 @@
 			}
 			
 			function remove(){
-				var i=item;
+				//Removal by overwriting and reducing total count
+				var i=item;								//Item obtained from selector function
 				if(selected==true){
 					for(x=i;x<localStorage.count;x++){
 						localStorage.setItem(x,localStorage.getItem(x+1));
@@ -149,12 +156,13 @@
 	 		}
 			
 			function editor(){
+				//Edit by modifying/resetting item in localStorage and reading from it
 				update();
 				if(selected){
-					var i=item;
-					var y=document.getElementById("dropper");
+					var i=item;						// item obtained from selector function
+					var drop=document.getElementById("dropper");
 					localStorage.setItem(i,document.getElementById("text").value);
-					localStorage.setItem("p"+i,parseInt(y.options[y.selectedIndex].value));
+					localStorage.setItem("p"+i,parseInt(drop.options[drop.selectedIndex].value));
 					update();
 				}	
 				selected=false;
@@ -162,13 +170,14 @@
          		}	
 			
 	 		function sorter(){
+				//Counting Sort the elements based on priority
 				var count=Number(localStorage.count);
 				var textarray=[];
 				var priority=[];
 				var count_priorty=[];
 				count_priorty[0]=count_priorty[1]=count_priorty[2]=count_priorty[3]=0;
 				for(i=1;i<=count;i++)
-				textarray[i-1]=localStorage.getItem(i);	
+					textarray[i-1]=localStorage.getItem(i);	
 				for(j=1;j<=count;j++)
 					priority[j-1]=localStorage.getItem("p"+j);
 				for(i=0;i<=count;i++)
@@ -188,10 +197,12 @@
 					localStorage.count=1;
 				else
 					localStorage.count=Number(localStorage.count)+1;
+				//Get text from drop_down box
 				var text=document.getElementById("text").value;
 				document.getElementById("main list").innerHTML+="<li id="+Number(localStorage.count)+"><a>"+text+"</a></li>";
 				document.getElementById("text").value="";
-				localStorage.setItem(localStorage.count,text);	
+				localStorage.setItem(localStorage.count,text);
+				//Get Priority From drop_down box
 				var drop=document.getElementById("dropper");
 				localStorage.setItem("p"+localStorage.count,parseInt(drop.options[drop.selectedIndex].value));
 				update();
