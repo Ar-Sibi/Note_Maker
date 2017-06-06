@@ -90,6 +90,9 @@
 				this.priority=priority;
 				}
 			}
+			if(localStorage.version!=1)
+				localStorage.clear();
+			localStorage.version=1;
 			var x=0;
 			var del=0;
 			var edit=0;
@@ -98,8 +101,8 @@
 	 		var item=0;
 	 		disableAll();
 	 		update();
-         		//localStorage items of form index hold the text and of the form "p"+index hold the priority
 			function update(){
+				//Update list with changed database
 				document.getElementById("main list").innerHTML="";
 				x=localStorage.count;
 				for(i=1;i<=x;i++){
@@ -107,29 +110,21 @@
 					var text=update_item.text;
 					document.getElementById("main list").innerHTML+="<li id="+i+" class=a"+update_item.priority+"><a>"+text+"</li>";
 				}
-				bind();
+				addListeners();
 				if(!localStorage.count||localStorage.count==0)
 					document.getElementById("main list").innerHTML="<li>"+"No notes to display"+"</li>";
 			}
 	 		
-			function bind(){
-				//Adding event listener by binding it
-				//Can't add event listeners directly because id of selected element reqd
-				var binder;
+			function addListeners(){
+				//Add event listeners 
 				for(i=1;i<=localStorage.count;i++){
-
-					var binderClass = function(element){
-						this.iod=i;
-						this.onclick1= function(event){
-							selector(this.iod);
-						};
-						element.addEventListener("click",this.onclick1.bind(this),false);
-					}
-					binder=new binderClass(document.getElementById(""+i));
+					var element = document.getElementById(""+i);
+					element.addEventListener("click",function(e){selector(parseInt(e.srcElement.id))});
 				}
 			}	
 			
 			function selector(i){
+				//Process on clicks to select items
 				update();
 				var selecti=JSON.parse(localStorage.getItem(i));
 				document.getElementById("editor").disabled=false;
@@ -144,6 +139,7 @@
 	 		} 	
 	 		
 			function disabler(){
+				//selectively disables buttons while item is selected
 				if(selected==false)
 					document.getElementById("editor").disabled=true;
 				document.getElementById("deleter").disabled=true;
@@ -151,6 +147,7 @@
 	 		}
 	 		
 			function disableAll(){
+				//Disables all buttons
 				document.getElementById("editor").disabled=true;
 				document.getElementById("deleter").disabled=true;
 				document.getElementById("adder").disabled=true;
@@ -209,6 +206,7 @@
 	 		}
 	 		
 			function add(){
+				//Add a note with text entered in textarea and selected priority
 				if(!localStorage.count)
 					localStorage.count=1;
 				else
